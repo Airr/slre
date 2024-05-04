@@ -73,6 +73,8 @@ struct regex_info {
   int flags;
 };
 
+int ar_match_count;
+
 static int is_metacharacter(const unsigned char *s) {
   static const char *metacharacters = "^$().[]*+?|\\Ssdbfnrtv";
   return strchr(metacharacters, *s) != NULL;
@@ -282,6 +284,7 @@ static int bar(const char *re, int re_len, const char *s, int s_len,
       if (info->caps != NULL && n > 0) {
         info->caps[bi - 1].ptr = s + j;
         info->caps[bi - 1].len = n;
+		ar_match_count = bi;
       }
       j += n;
     } else if (re[i] == '^') {
@@ -422,7 +425,14 @@ static int foo(const char *re, int re_len, const char *s, int s_len,
   return baz(s, s_len, info);
 }
 
-int slre_match(const char *regexp, const char *s, int s_len,
+// Added function to return number of matches
+// AIR, 2024-05-04
+int  __declspec(dllexport)slre_count(void) {
+
+	return ar_match_count;
+}
+
+int  __declspec(dllexport)slre_match(const char *regexp, const char *s, int s_len,
                struct slre_cap *caps, int num_caps, int flags) {
   struct regex_info info;
 

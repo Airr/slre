@@ -34,8 +34,9 @@ struct slre_cap {
   int len;
 };
 
+int  __declspec(dllexport)slre_count(void);
 
-int slre_match(const char *regexp, const char *buf, int buf_len,
+int  __declspec(dllexport) slre_match(const char *regexp, const char *buf, int buf_len,
                struct slre_cap *caps, int num_caps, int flags);
 
 /* Possible flags for slre_match() */
